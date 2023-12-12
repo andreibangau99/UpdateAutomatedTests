@@ -28,19 +28,22 @@ public class Main {
 
         EntityList automatedTestsEntityList = octane.entityList("automated_tests");
         String testId = args[0];
-        updateTestById(automatedTestsEntityList, testId);
+        String testName = args[1];
+        String className = args[2];
+        String testPackage = args[3];
+        updateTestById(automatedTestsEntityList, testId, testName,className, testPackage);
     }
 
-    private static void updateTestById(EntityList automatedTestsEntityList, String testId) {
+    private static void updateTestById(EntityList automatedTestsEntityList, String testId, String testName,String className, String testPackage) {
         final Query query = Query.statement("id", QueryMethod.EqualTo, testId).build();
-        OctaneCollection<EntityModel> automatedTests = automatedTestsEntityList.get()
-                .addFields("name", "class_name", "package")
-                .query(query)
-                .execute();
+        OctaneCollection<EntityModel> automatedTests =
+                automatedTestsEntityList.get().addFields("name", "class_name", "package").query(query).execute();
         Optional<EntityModel> automatedTestOpt = automatedTests.stream().findFirst();
         if (automatedTestOpt.isPresent()) {
             EntityModel automatedTest = automatedTestOpt.get();
-            automatedTest.setValue(new StringFieldModel("name","newName2"));
+            automatedTest.setValue(new StringFieldModel("name", testName));
+            automatedTest.setValue(new StringFieldModel("class_name", className));
+            automatedTest.setValue(new StringFieldModel("package", testPackage));
             automatedTestsEntityList.update().entities(Collections.singleton(automatedTest)).execute();
             System.out.println("Test updated");
         } else {
