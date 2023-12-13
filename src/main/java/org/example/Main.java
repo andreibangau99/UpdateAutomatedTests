@@ -21,7 +21,7 @@ public class Main {
 
         octaneBuilder.Server("http://localhost:8080/dev");
         octaneBuilder.sharedSpace(1001);
-        octaneBuilder.workSpace(6001);
+        octaneBuilder.workSpace(7001);
 
         Octane octane = octaneBuilder.build();
 
@@ -44,7 +44,9 @@ public class Main {
             automatedTest.setValue(new StringFieldModel("name", testName));
             automatedTest.setValue(new StringFieldModel("class_name", className));
             automatedTest.setValue(new StringFieldModel("package", testPackage));
+
             automatedTestsEntityList.update().entities(Collections.singleton(automatedTest)).execute();
+
             System.out.println("Test updated");
         } else {
             System.out.println("Test not found!");
